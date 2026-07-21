@@ -1,4 +1,5 @@
 import { useState } from "react";
+import UploadDocuments from "./UploadDocuments";
 
 function App() {
   // two pieces of memory: user input and gemini response
@@ -31,9 +32,13 @@ function App() {
     <div style={{ padding: "40px" }}>
       <h1>Career Interview Copilot</h1>
       
+      <h1> <UploadDocuments /> </h1>
+
+      <hr/>
+
       <input
         type = "text"
-        placeholder = "Enter your message"
+        placeholder = "Ask about your documents"
         value = {message}
         onChange = {(e) => setMessage(e.target.value)}
       />

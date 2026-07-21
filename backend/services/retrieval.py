@@ -12,18 +12,21 @@ def cosine_similarity(vector1, vector2):
 
     return similarity
 
-def retrieve(question, vector_store):
+def retrieve(question, vector_store, k=3):
     question_embedding = create_embedding(question)
 
-    best_score = -1 
-    best_chunk = None
+    similarities = []
 
     for item in vector_store:
-        similarity = cosine_similarity(question_embedding, item["embedding"])
+        similarity = cosine_similarity(question_embedding, item['embedding'])
         
-        if similarity > best_score: 
-            best_score = similarity
-            best_chunk = item["chunk"]
+        similarities.append(
+            {
+                'score': similarity, 
+                'chunk': item['chunk']
+            }
+        )
     
-    return best_chunk, best_score
+    similarities.sort(key=lambda x: x['score'], reverse=True)
     
+    return similarities[:k]
