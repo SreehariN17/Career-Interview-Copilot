@@ -14,8 +14,6 @@ class ChatRequest(BaseModel):
 
 app = FastAPI()
 
-vector_store = None
-
 # Enable CORS in FastAPI (allow requests coming from React App)
 app.add_middleware(
     CORSMiddleware,
@@ -35,24 +33,17 @@ def root():
 
 @app.post("/upload")
 async def upload_documents(files: List[UploadFile] = File(...)):
-
-    global vector_store
-
-    vector_store = process_documents(files)
+    chunks_added = process_documents(files)
 
     return {
         "message": "Documents processed successfully",
-        "documents_uploaded": len(files)
+        "documents_uploaded": len(files),
+        "chunks_added": chunks_added
     }
 
 @app.post("/chat")
 def chat(request: ChatRequest):
-    if vector_store is None: 
-        return {
-            "response": "Please upload documents first."
-        }
-
-    response = answer_question(request.message, vector_store)
+    response = answer_question(request.message)
     return {
         "response": response
     }

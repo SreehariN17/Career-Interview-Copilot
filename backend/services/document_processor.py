@@ -1,6 +1,6 @@
 from services.pdf import extract_text
 from services.chunking import chunk_text
-from services.vector_store import build_vector_store
+from services.chroma_db import add_documents
 
 def process_documents(files):
     all_chunks = []
@@ -10,5 +10,5 @@ def process_documents(files):
         chunks = chunk_text(text)
         all_chunks.extend(chunks)
     
-    vector_store = build_vector_store(all_chunks)
-    return vector_store
+    add_documents(all_chunks)
+    return len(all_chunks)
